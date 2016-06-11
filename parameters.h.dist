@@ -1,18 +1,19 @@
-const char* WIFI_SSID         = "ssid";
-const char* WIFI_PASSWORD     = "password";
+const char* WIFI_SSID            = "ssid";
+const char* WIFI_PASSWORD        = "password";
 
-const int REQUEST_TIMEOUT     = 5 * 1000;          // 5 seconds
-const int SLEEP_TIME          = 60 * 60 * 1000;    // 1 hour
+const int REQUEST_TIMEOUT        = 5 * 1000;          // 5 seconds
+const int SLEEP_TIME             = 60 * 60 * 1000;    // 1 hour
+const int WATCHDOG_SLEEP_TIMEOUT = 2 * 60 * 1000;     // 2 minutes
 
-const int DELAY_BETWEEN_TRIES = 2 * 60 * 1000;     // 2 minutes
-const int MAX_TRIES           = 10;
+const int DELAY_BETWEEN_TRIES    = 2 * 60 * 1000;     // 2 minutes
+const int MAX_TRIES              = 10;
 
-const char* CHECK_HOST1       = "fr.mappy.com";
-const char* CHECK_URL1        = "/";
-const char* CHECK_HOST2       = "www.google.com";
-const char* CHECK_URL2        = "/";
+const char* CHECK_HOST1          = "fr.mappy.com";
+const char* CHECK_URL1           = "/";
+const char* CHECK_HOST2          = "www.google.com";
+const char* CHECK_URL2           = "/";
 
-const char* MONITOR_HOST      = "host.com";
-const char* MONITOR_URL_UP    = "/web/up";
-const char* MONITOR_URL_DOWN  = "/web/down";
+const char* MONITOR_HOST         = "host.com";
+const char* MONITOR_URL_UP       = "/web/up";
+const char* MONITOR_URL_DOWN     = "/web/down";
 
