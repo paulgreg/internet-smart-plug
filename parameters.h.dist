@@ -1,0 +1,15 @@
+const char* WIFI_SSID              = "ssid";
+const char* WIFI_PASSWORD          = "password";
+
+const int REQUEST_TIMEOUT          = 5 * 1000;          // 5 seconds
+const int SLEEP_TIME               = 60 * 60 * 1000;    // 1 hour
+
+const char* HTTP_CHECK_HOST1       = "www.google.com";
+const char* HTTP_CHECK_URL1        = "/";
+const char* HTTP_CHECK_HOST2       = "fr.mappy.com";
+const char* HTTP_CHECK_URL2        = "/";
+
+const char* HTTPS_MONITOR_HOST     = "host.com";
+const char* HTTPS_MONITOR_URL_UP   = "/web/up";
+const char* HTTPS_MONITOR_URL_DOWN = "/web/down";
+
