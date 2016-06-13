@@ -4,6 +4,9 @@ const char* WIFI_PASSWORD          = "password";
 const int REQUEST_TIMEOUT          = 5 * 1000;          // 5 seconds
 const int SLEEP_TIME               = 60 * 60 * 1000;    // 1 hour
 
+const int DELAY_BETWEEN_TRIES      = 2 * 60 * 1000;     // 2 minutes
+const int MAX_TRIES                = 10;
+
 const char* HTTP_CHECK_HOST1       = "www.google.com";
 const char* HTTP_CHECK_URL1        = "/";
 const char* HTTP_CHECK_HOST2       = "fr.mappy.com";
