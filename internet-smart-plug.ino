@@ -14,12 +14,14 @@ void setup() {
 void loop() {
   boolean online;
   unsigned short i = 0;
+  WiFiClient httpClient;
+  WiFiClientSecure httpsClient;
 
   do {
     connectToWifi();
     
-    boolean check1 = get(HTTP_CHECK_HOST1, HTTP_CHECK_URL1);
-    boolean check2 = get(HTTP_CHECK_HOST2, HTTP_CHECK_URL2);
+    boolean check1 = get(httpClient, 80, CHECK_HOST1, CHECK_URL1);
+    boolean check2 = get(httpClient, 80, CHECK_HOST2, CHECK_URL2);
     
     online = (check1 || check2);
     
@@ -30,8 +32,7 @@ void loop() {
   Serial.println(online ? "OK" : "KO");
   Serial.println("");
 
-  connectToWifi();
-  getSecure(HTTPS_MONITOR_HOST, online ? HTTPS_MONITOR_URL_UP : HTTPS_MONITOR_URL_DOWN);
+  get(httpsClient, 443, MONITOR_HOST, online ? MONITOR_URL_UP : MONITOR_URL_DOWN);
 
   if (!online) {
     cyclePower();
@@ -83,51 +84,13 @@ void connectToWifi() {
     }
 }
 
-boolean getSecure(const char* host, const char* url) {
-  WiFiClientSecure client;
-
-  Serial.print("> ");
-  Serial.print(host);
-  Serial.print(":443");
-
-  if (!client.connect(host, 443)) {
-    Serial.println("");
-    Serial.println("connection failed");
-    return false;
-  }
-
-  Serial.println(url);
-
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "User-Agent: ESP8266\r\n" +
-               "Connection: close\r\n\r\n");
-
-  unsigned long timeout = millis();
-  while (client.available() == 0) {
-    if (millis() - timeout > REQUEST_TIMEOUT) {
-      Serial.println("client Timeout !");
-      client.stop();
-      return false;
-    }
-  }
-
-  if (client.connected()) {
-    String line = client.readStringUntil('\n');
-    Serial.print("< ");
-    Serial.println(line);
-  }
-  return true;
-}
-
-boolean get(const char* host, const char* url) {
-  WiFiClient client;
-
+boolean get(WiFiClient &client, unsigned int port, const char* host, const char* url) {
   Serial.print(">  ");
   Serial.print(host);
-  Serial.print(":80");
+  Serial.print(":");
+  Serial.print(port);
 
-  if (!client.connect(host, 80)) {
+  if (!client.connect(host, port)) {
     Serial.println("");
     Serial.println("connection failed");
     return false;
