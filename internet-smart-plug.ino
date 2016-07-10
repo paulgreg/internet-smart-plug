@@ -10,13 +10,13 @@ unsigned const int HTTPS_PORT = 443;
 Ticker sleepTicker;
 
 void setup() {
+  pinMode(16, WAKEUP_PULLUP);
   Serial.begin(115200);
   delay(1000);
   Serial.println("");
   Serial.println("Internet Smart Plug");
   sleepTicker.once_ms(WATCHDOG_SLEEP_TIMEOUT, &sleep); // maximum time allowed for loop function to run (watchdog)
   delay(1000);
-
   connectToWifi();
 }
 
