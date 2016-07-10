@@ -1,11 +1,9 @@
 const char* WIFI_SSID            = "ssid";
 const char* WIFI_PASSWORD        = "password";
 
-const int REQUEST_TIMEOUT        = 5 * 1000;          // 5 seconds
-const int SLEEP_TIME             = 60 * 60 * 1000;    // 1 hour
-const int WATCHDOG_SLEEP_TIMEOUT = 2 * 60 * 1000;     // 2 minutes
+const int REQUEST_TIMEOUT        = 5 * 1000;           // 5 seconds
+const int WAIT_TIME              = 6 * 60 * 60 * 1000; // 6 hours
 
-const int DELAY_BETWEEN_TRIES    = 2 * 60 * 1000;     // 2 minutes
 const int MAX_TRIES              = 10;
 
 const char* CHECK_HOST1          = "fr.mappy.com";

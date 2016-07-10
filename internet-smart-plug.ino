@@ -1,22 +1,22 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
-#include <Ticker.h>
+
+// GPIO 4
+#define GPIO 4
 
 // parameters.h file contains setup parameters like wifi ssid and password, host to connect, etc
 #include "parameters.h"
 
 unsigned const int HTTPS_PORT = 443;
 
-Ticker sleepTicker;
-
 void setup() {
-  pinMode(16, WAKEUP_PULLUP);
+  pinMode(GPIO, OUTPUT);
+  digitalWrite(GPIO, LOW);
+  
   Serial.begin(115200);
   delay(1000);
   Serial.println("");
   Serial.println("Internet Smart Plug");
-  sleepTicker.once_ms(WATCHDOG_SLEEP_TIMEOUT, &sleep); // maximum time allowed for loop function to run (watchdog)
-  delay(1000);
   connectToWifi();
 }
 
@@ -43,23 +43,19 @@ void loop() {
     Serial.println("nothing to do");
   }
 
-  sleep();
+  stopWifiAndReboot();
 }
 
-void sleep() {
-  Serial.print("going to sleep: ");
-  Serial.println(SLEEP_TIME);
-  ESP.deepSleep(SLEEP_TIME, WAKE_RF_DISABLED); // When it wakes up we start again in setup().
-  delay(5000); // It can take a while for the ESP to actually go to sleep.
-}
+void stopWifiAndReboot() {
+  Serial.print("disabling WIFI then wait: ");
+  Serial.println(WAIT_TIME);
 
-// Turn plug off then on
-void cyclePower() {
-  Serial.println("turning plug off");
-  // TODO: GPIO -> HIGH
-  delay(2500);
-  // TODO: GPIO -> LOW
-  Serial.println("turning plug on");
+  WiFi.mode(WIFI_OFF);
+  WiFi.forceSleepBegin();
+  delay(1); //Needed, at least in my tests WiFi doesn't power off without this for some reason
+  delay(WAIT_TIME);
+  Serial.println("restarting");
+  ESP.restart();
 }
 
 void connectToWifi() {
@@ -68,15 +64,18 @@ void connectToWifi() {
   Serial.println("");
   Serial.print("connecting to ");
   Serial.println(WIFI_SSID);
+
+  WiFi.forceSleepWake();
+  WiFi.mode(WIFI_STA);  
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
     i++;
     if (i > 50) {
-      // Maybe cyclePower() ?
-      ESP.restart();
-    }
+        Serial.println("can’t connect to wifi");
+        stopWifiAndReboot();
+      }
   }
   Serial.println("");
   Serial.println("wifi connected");
@@ -123,6 +122,15 @@ boolean get(const char* host, const char* url) {
     status = true;
   }
   return status;
+}
+
+// Turn plug off then on
+void cyclePower() {
+  Serial.println("turning plug off");
+  digitalWrite(GPIO, HIGH);
+  delay(5000);
+  digitalWrite(GPIO, LOW);
+  Serial.println("turning plug on");
 }
 
 
